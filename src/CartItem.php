@@ -339,7 +339,7 @@ class CartItem implements Arrayable, Jsonable
     {
         ksort($options);
 
-        return md5($id . serialize($options));
+        return md5($id . json_encode($options));
     }
 
     /**
