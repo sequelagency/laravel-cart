@@ -46,6 +46,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Auto save the cart on app shutdown
+    |--------------------------------------------------------------------------
+    |
+    | When this option is set to 'true' the cart will automatically
+    | be saved against the current logged-in user.
+    |
+    */
+
+    'auto_save_to_user' => false,
+
+    /*
+    |--------------------------------------------------------------------------
     | Default number format
     |--------------------------------------------------------------------------
     |

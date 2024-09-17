@@ -2,6 +2,7 @@
 
 namespace Azmolla\Shoppingcart;
 
+use Azmolla\Shoppingcart\Contracts\HasCart;
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Session\SessionManager;
 use Illuminate\Support\ServiceProvider;
@@ -16,7 +17,7 @@ class ShoppingcartServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('cart', 'Azmolla\Shoppingcart\Cart');
+        $this->app->bind('cart', Cart::class);
 
         $config = __DIR__ . '/../config/cart.php';
         $this->mergeConfigFrom($config, 'cart');
@@ -26,6 +27,12 @@ class ShoppingcartServiceProvider extends ServiceProvider
         $this->app['events']->listen(Logout::class, function () {
             if ($this->app['config']->get('cart.destroy_on_logout')) {
                 $this->app->make(SessionManager::class)->forget('cart');
+            }
+        });
+
+        $this->app->terminating(function () {
+            if ($this->app['config']->get('cart.auto_save_to_user') && auth()->user() && auth()->user() instanceof HasCart) {
+                $this->app->make('cart')->storeOrUpdate(auth()->user()->getCartIdentifier());
             }
         });
 
