@@ -49,6 +49,10 @@ class Cart
      */
     private $extraCosts;
 
+    private \DateTime $createdAt;
+
+    private \DateTime $updatedAt;
+
     /**
      * Cart constructor.
      *
