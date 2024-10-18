@@ -505,7 +505,8 @@ class Cart
 
         $content = $this->getContent();
 
-        foreach ($storedContent as $cartItem) {
+        foreach ($storedContent as $item) {
+            $cartItem = CartItem::fromJson($item);
             $content->put($cartItem->rowId, $cartItem);
         }
 

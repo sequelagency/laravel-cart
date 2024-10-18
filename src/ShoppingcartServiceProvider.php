@@ -3,6 +3,7 @@
 namespace Azmolla\Shoppingcart;
 
 use Azmolla\Shoppingcart\Contracts\HasCart;
+use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Session\SessionManager;
 use Illuminate\Support\ServiceProvider;
@@ -33,6 +34,12 @@ class ShoppingcartServiceProvider extends ServiceProvider
         $this->app->terminating(function () {
             if ($this->app['config']->get('cart.auto_save_to_user') && auth()->user() && auth()->user() instanceof HasCart) {
                 $this->app->make('cart')->storeOrUpdate(auth()->user()->getCartIdentifier());
+            }
+        });
+
+        $this->app['events']->listen(Login::class, function () {
+            if ($this->app['config']->get('cart.auto_save_to_user') && auth()->user() && auth()->user() instanceof HasCart) {
+                $this->app->make('cart')->restore(auth()->user()->getCartIdentifier());
             }
         });
 

@@ -357,8 +357,36 @@ class CartItem implements Arrayable, Jsonable
             'price'    => $this->price,
             'options'  => $this->options->toArray(),
             'tax'      => $this->tax,
-            'subtotal' => $this->subtotal
+            'subtotal' => $this->subtotal,
+            'model' => $this->associatedModel,
         ];
+    }
+
+    /**
+     * Get the instance as an array.
+     *
+     * @return array
+     */
+    public static function fromJson(object $data): self
+    {
+        $cartItem = new self(
+            id: $data->id,
+            name: $data->name,
+            price: $data->price,
+            options: $data->options,
+        );
+
+        $cartItem->rowId = $data->rowId;
+        $cartItem->qty = $data->qty;
+        $cartItem->tax = $data->tax;
+        $cartItem->subtotal = $data->subtotal;
+
+        if ($data->model) {
+            $class = $data->model;
+            $cartItem->associate($class::find($data->id));
+        }
+
+        return $cartItem;
     }
 
     /**
