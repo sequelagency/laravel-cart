@@ -379,7 +379,6 @@ class CartItem implements Arrayable, Jsonable
         $cartItem->rowId = $data->rowId;
         $cartItem->qty = $data->qty;
         $cartItem->tax = $data->tax;
-        $cartItem->subtotal = $data->subtotal;
 
         if ($data->model) {
             $class = $data->model;
